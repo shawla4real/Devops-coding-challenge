@@ -7,8 +7,14 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci
+# Clean npm cache and install dependencies
+RUN npm cache clean --force && \
+    npm install postcss postcss-safe-parser --legacy-peer-deps && \
+    npm install && \
+    npm ci
+
+# Set NODE_OPTIONS to bypass OpenSSL errors
+ENV NODE_OPTIONS=--openssl-legacy-provider
 
 # Copy source files (including public/ and src/)
 COPY . .
