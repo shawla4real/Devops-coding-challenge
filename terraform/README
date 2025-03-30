@@ -1,0 +1,10 @@
+Assignment 
+
+Deploy a Jenkins server to AWS, and make it publicly accessible over the internet.
+EC2: The Jenkins server, install jenkins, docker, and 
+Security group: TO control traffic to Jenkins, ECS, and ALB. allow 8080 http and 50000 agent, front end 80 http and back end 3000. ALB  will allow public access to frontend, internal routing to backend.
+IAM Roles-	two roles need to be created, one for jenkins to interact with aws services and the other for ECS to pull images from ECR
+ECR	: storage for frontend/backend Docker image
+
+S3	Store Terraform state (shared/versioned).
+Ssm parameter: for centralized configuration 
