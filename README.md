@@ -15,3 +15,16 @@ MY-backend
 My- Frontend 
 are the application that was used as the forked application kept throwing alot of errors .
 terraform folder has code used to deploy the AWS ECS
+
+frontend ip.address; http://98.81.69.191:3000
+jenkins ; http://3.239.180.246:8080
+github : https://github.com/shawla4real/LF-coding-challenge
+​To complete the LF coding challenge, I utilized the following technologies:​
+
+Frontend: Developed using React, 
+
+Backend: Implemented with Node.js and Express, ​
+
+Deployment: Both applications were containerized using Docker and deployed on AWS Elastic Container Service (ECS)​
+
+I used Terraform to provision my infrastructures, Git as the SCM and Jenkins for CICD
