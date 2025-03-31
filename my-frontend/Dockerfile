@@ -1,9 +1,19 @@
 # Build stage
-FROM node:18-alpine as build
+FROM node:16-alpine as build
 WORKDIR /app
+
+# First install only dependencies to leverage Docker cache
 COPY package*.json ./
-RUN npm install
+
+# Install dependencies with explicit versions
+RUN npm install -g npm@latest && \
+    npm install --legacy-peer-deps && \
+    npm install ajv@^8.12.0 schema-utils@^4.2.0 --save
+
+# Copy source files
 COPY . .
+
+# Build the app
 RUN npm run build
 
 # Production stage
