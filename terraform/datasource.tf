@@ -13,15 +13,7 @@ data "aws_ami" "server_ami" {
   }
 }
 data "aws_vpc" "vpc" {
-  filter {
-    name   = "vpc-id"
-    values = ["vpc-0b9e821d627b1bbd4"]
-  }
-
-  filter {
-    name   = "tag:Name"
-    values = ["my-vpc"] # Add your VPC name tag
-  }
+  id = "vpc-0b9e821d627b1bbd4"  
 }
 
 data "aws_subnet" "public" {
@@ -32,7 +24,7 @@ data "aws_subnet" "public" {
 
   filter {
     name   = "tag:Name"
-    values = ["public-subnet-1a"] # Add your subnet name tag
+    values = ["public-subnet-1a"] 
   }
 
   filter {
@@ -80,5 +72,5 @@ data "aws_security_group" "app-sg" {
 }
 
 data "aws_iam_role" "ecs_task_execution_role" {
-  name = "ecs_task_execution_role"
+  name = "ecs-task-exec-role"
 }
