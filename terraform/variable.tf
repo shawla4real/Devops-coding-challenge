@@ -49,4 +49,7 @@ variable "build_number" {
   type        = string
 }
 
-
+variable "backend_endpoint" {
+  description = "The URL endpoint for the backend service that the frontend should connect to."
+  type        = string
+}

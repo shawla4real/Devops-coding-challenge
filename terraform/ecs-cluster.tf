@@ -1,3 +1,6 @@
+#########################
+# ECS Cluster
+#########################
 resource "aws_ecs_cluster" "cluster" {
   name = "Devops-cluster"
   setting {
@@ -10,58 +13,89 @@ resource "aws_ecs_cluster" "cluster" {
     tomap({ "Name" = "${local.prefix}-ecs-cluster" })
   )
 }
-resource "aws_ecs_task_definition" "frontend" {
-  family                   = "frontend"
-  network_mode             = "awsvpc"
-  requires_compatibilities = ["FARGATE"]
-  cpu                      = "256" # Required for Fargate
-  memory                   = "512" # Required for Fargate (or use memoryReservation)
-  execution_role_arn       = data.aws_iam_role.ecs_task_execution_role.arn
-  container_definitions = jsonencode([{
-    name         = "frontend",
-    image = "${var.ecr_frontend}:${var.build_number}",
 
-    portMappings = [{ containerPort = 8080}],
-
-    memory = 512, # Hard limit (MiB)
-
-  }])
-}
-resource "aws_ecs_service" "frontend" {
-  name            = "frontend-service"
-  cluster         = aws_ecs_cluster.cluster.id
-  task_definition = aws_ecs_task_definition.frontend.arn
-  launch_type     = "FARGATE"
-  network_configuration {
-    subnets = [data.aws_subnet.public.id, data.aws_subnet.public2.id]
-
-  }
-}
+#########################
+# Backend Task Definition & Service
+#########################
 resource "aws_ecs_task_definition" "backend" {
   family                   = "backend"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = "256" # Required for Fargate
-  memory                   = "512" # Required for Fargate (or use memoryReservation)
+  cpu                      = "256"
+  memory                   = "512"
   execution_role_arn       = data.aws_iam_role.ecs_task_execution_role.arn
-  container_definitions = jsonencode([{
-    name         = "backend",
-    image = "${var.ecr_backend}:${var.build_number}"
 
-    portMappings = [{ containerPort = 3000 }],
-
-    memory = 512, # Hard limit (MiB)
-
-  }])
+  container_definitions = jsonencode([
+    {
+      name         = "backend",
+      image        = "${var.ecr_backend}:${var.build_number}",
+      portMappings = [{
+        containerPort = 8080,
+        hostPort      = 8080,
+        protocol      = "tcp"
+      }],
+      memory       = 512
+    }
+  ])
 }
 
 resource "aws_ecs_service" "backend" {
   name            = "backend-service"
   cluster         = aws_ecs_cluster.cluster.id
   task_definition = aws_ecs_task_definition.backend.arn
+  desired_count   = 1
   launch_type     = "FARGATE"
-  network_configuration {
-    subnets = [data.aws_subnet.public.id, data.aws_subnet.public2.id]
 
+  network_configuration {
+    subnets         = [data.aws_subnet.public.id, data.aws_subnet.public2.id]
+    security_groups = [aws_security_group.app.id]
+    assign_public_ip = "true"
+  }
+}
+
+#########################
+# Frontend Task Definition & Service
+#########################
+resource "aws_ecs_task_definition" "frontend" {
+  family                   = "frontend"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = "256"
+  memory                   = "512"
+  execution_role_arn       = data.aws_iam_role.ecs_task_execution_role.arn
+
+  container_definitions = jsonencode([
+    {
+      name         = "frontend",
+      image        = "${var.ecr_frontend}:${var.build_number}",
+      portMappings = [{
+        containerPort = 3000,
+        hostPort      = 3000,
+        protocol      = "tcp"
+      }],
+      # IMPORTANT: Pass the backend URL as an environment variable.
+      environment = [
+        {
+          name  = "BACKEND_URL"
+          value = var.backend_endpoint
+        }
+      ],
+      memory       = 512
+    }
+  ])
+}
+
+resource "aws_ecs_service" "frontend" {
+  depends_on = [aws_ecs_service.backend]
+  name            = "frontend-service"
+  cluster         = aws_ecs_cluster.cluster.id
+  task_definition = aws_ecs_task_definition.frontend.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets         = [data.aws_subnet.public.id, data.aws_subnet.public2.id]
+    security_groups = [aws_security_group.app.id]
+    assign_public_ip = "true"
   }
 }
