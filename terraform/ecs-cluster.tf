@@ -1,6 +1,4 @@
-#########################
-# ECS Cluster
-#########################
+
 resource "aws_ecs_cluster" "cluster" {
   name = "Devops-cluster"
   setting {
@@ -14,9 +12,7 @@ resource "aws_ecs_cluster" "cluster" {
   )
 }
 
-#########################
-# Backend Task Definition & Service
-#########################
+
 resource "aws_ecs_task_definition" "backend" {
   family                   = "backend"
   network_mode             = "awsvpc"
@@ -62,9 +58,7 @@ resource "aws_ecs_service" "backend" {
 
 }
 
-#########################
-# Frontend Task Definition & Service
-#########################
+
 resource "aws_ecs_task_definition" "frontend" {
   family                   = "frontend"
   network_mode             = "awsvpc"
@@ -82,7 +76,7 @@ resource "aws_ecs_task_definition" "frontend" {
         hostPort      = 3000,
         protocol      = "tcp"
       }],
-      # IMPORTANT: Pass the backend URL as an environment variable.
+     
       environment = [
         {
           name  = "BACKEND_URL"
@@ -107,4 +101,10 @@ resource "aws_ecs_service" "frontend" {
     security_groups = [aws_security_group.app.id]
     assign_public_ip = "true"
   }
+  load_balancer {
+  target_group_arn = aws_lb_target_group.frontend_tg.arn
+  container_name   = "frontend"
+  container_port   = 3000
+}
+
 }

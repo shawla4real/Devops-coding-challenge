@@ -7,4 +7,3 @@ IAM Roles-	two roles need to be created, one for jenkins to interact with aws se
 ECR	: storage for frontend/backend Docker image
 
 S3	Store Terraform state (shared/versioned).
-Ssm parameter: for centralized configuration 
