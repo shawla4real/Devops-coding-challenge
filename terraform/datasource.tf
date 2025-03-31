@@ -22,7 +22,7 @@ data "aws_subnet" "public" {
 }
 
 data "aws_subnet" "public2" {
-  id = "subnet-0c3ad68030e90a2f2" # Replace with your subnet ID
+  id = "subnet-0d64f1acd80c73f03" # Replace with your subnet ID
 }
 data "aws_ecr_repository" "frontend" {
   name = "frontend"
