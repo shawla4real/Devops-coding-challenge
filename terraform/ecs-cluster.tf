@@ -51,6 +51,15 @@ resource "aws_ecs_service" "backend" {
     security_groups = [aws_security_group.app.id]
     assign_public_ip = "true"
   }
+  
+  load_balancer {
+    target_group_arn = aws_lb_target_group.backend_tg.arn
+    container_name   = "backend"
+    container_port   = 8080
+  }
+
+  depends_on = [aws_lb_listener.backend_listener]
+
 }
 
 #########################
@@ -77,7 +86,7 @@ resource "aws_ecs_task_definition" "frontend" {
       environment = [
         {
           name  = "BACKEND_URL"
-          value = var.backend_endpoint
+          value = "http://${aws_lb.backend_alb.dns_name}"
         }
       ],
       memory       = 512
