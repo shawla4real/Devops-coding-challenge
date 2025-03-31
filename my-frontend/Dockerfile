@@ -1,12 +1,12 @@
-# Build stage
-FROM node:16-alpine as build
+# Build stage - Using Node 18 which is a good compromise for React projects
+FROM node:18.20.2-alpine as build
 WORKDIR /app
 
 # First install only dependencies to leverage Docker cache
 COPY package*.json ./
 
-# Install dependencies with explicit versions
-RUN npm install -g npm@latest && \
+# Install specific npm version compatible with Node 18
+RUN npm install -g npm@8.19.4 && \
     npm install --legacy-peer-deps && \
     npm install ajv@^8.12.0 schema-utils@^4.2.0 --save
 
