@@ -17,11 +17,11 @@ data "aws_vpc" "vpc" {
   id = "vpc-0b9e821d627b1bbd4" # Replace with your VPC ID
 }
 
-data "aws_subnet" "public.id" {
+data "aws_subnet" "public" {
   id = "subnet-04565c45ab6bae2ed" # Replace with your subnet ID
 }
 
-data "aws_subnet" "public2.id" {
+data "aws_subnet" "public2" {
   id = "subnet-0c3ad68030e90a2f2" # Replace with your subnet ID
 }
 data "aws_ecr_repository" "frontend" {
