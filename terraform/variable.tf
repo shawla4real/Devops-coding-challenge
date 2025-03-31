@@ -33,5 +33,20 @@ variable "subnet_cidr_list" {
 variable "instance_type" {
   default = "t2.medium"
 }
+variable "ecr_backend" {
+  description = "ECR repository URL for the backend container"
+  type        = string
+  default     = "662508601281.dkr.ecr.us-east-1.amazonaws.com/backend"
+}
+
+variable "ecr_frontend" {
+  description = "ECR repository URL for the backend container"
+  type        = string
+  default     = "662508601281.dkr.ecr.us-east-1.amazonaws.com/frontend"
+}
+variable "build_number" {
+  description = "Build number tag for the container image"
+  type        = string
+}
 
 

@@ -1,7 +1,7 @@
 
 
 resource "aws_iam_role_policy_attachment" "jenkins_ecr" {
-  role       = data.aws_iam_role.jenkins.arn
+  role       = data.aws_iam_role.jenkins.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
 }
 

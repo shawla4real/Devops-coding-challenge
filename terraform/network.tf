@@ -15,7 +15,7 @@ resource "aws_lb" "frontend" {
 resource "aws_lb_target_group" "frontend" {
   port     = 80
   protocol = "HTTP"
-  vpc_id   = "data.aws_vpc.vpc.id"
+  vpc_id   = data.aws_vpc.vpc.id
   name     = "frontend-lb-tg"
 
   tags = merge(
