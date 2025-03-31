@@ -12,19 +12,69 @@ data "aws_ami" "server_ami" {
     values = ["hvm"]
   }
 }
-
 data "aws_vpc" "vpc" {
-  id = "vpc-0b9e821d627b1bbd4" # Replace with your VPC ID
+  filter {
+    name   = "vpc-id"
+    values = ["vpc-0b9e821d627b1bbd4"]
+  }
+
+  filter {
+    name   = "tag:Name"
+    values = ["my-vpc"] # Add your VPC name tag
+  }
 }
 
 data "aws_subnet" "public" {
-  id = "subnet-04565c45ab6bae2ed" # Replace with your subnet ID
+  filter {
+    name   = "subnet-id"
+    values = ["subnet-04565c45ab6bae2ed"]
+  }
+
+  filter {
+    name   = "tag:Name"
+    values = ["public-subnet-1a"] # Add your subnet name tag
+  }
+
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.vpc.id]
+  }
 }
 
 data "aws_subnet" "public2" {
-  id = "subnet-0d64f1acd80c73f03" # Replace with your subnet ID
+  filter {
+    name   = "subnet-id"
+    values = ["subnet-0d64f1acd80c73f03"]
+  }
+
+  filter {
+    name   = "tag:Name"
+    values = ["public-subnet-1b"] 
+  }
+
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.vpc.id]
+  }
 }
+
 data "aws_ecr_repository" "frontend" {
   name = "frontend"
 }
-   
+
+data "aws_iam_role" "jenkins" {
+  name = "jenkins-role"
+}
+
+data "aws_security_group" "app-sg" {
+
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.vpc.id]  
+  }
+
+  filter {
+    name   = "jenkins-sg"
+    values = ["app-sg"]  
+  }
+}
