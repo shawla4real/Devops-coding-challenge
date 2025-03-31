@@ -1,7 +1,7 @@
 
 resource "aws_security_group" "app" {
-  name        = "Jenkins_sg"
-  description = "Jenkins security group"
+  name        = "app_sg"
+  description = "app security group"
   vpc_id      = data.aws_vpc.vpc.id
 
 
