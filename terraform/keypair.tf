@@ -8,8 +8,8 @@ resource "aws_key_pair" "generated" {
 }
 
 resource "local_file" "private_key" {
-  content  = tls_private_key.this.private_key_openssh
-  filename = "generated-key2.pem"
+  content         = tls_private_key.this.private_key_openssh
+  filename        = "generated-key2.pem"
   file_permission = "0600"
 }
 
