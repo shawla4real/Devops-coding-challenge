@@ -32,6 +32,6 @@ resource "aws_ecs_service" "frontend" {
   task_definition = aws_ecs_task_definition.frontend.arn
   launch_type     = "FARGATE"
   network_configuration {
-    subnets = [data.aws_subnet.public]
+    subnets = ["data.aws_subnet.public"]
   }
 }
