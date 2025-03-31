@@ -48,10 +48,10 @@ data "aws_subnet" "public2" {
 
   filter {
     name   = "cidr-block"
-    values = [var.subnet_cidr_list[2]]  # Matches your CIDR block
+    values = [var.subnet_cidr_list[2]]  #
   }
 
-  depends_on = [data.aws_vpc.vpc]  # Explicit dependency
+  depends_on = [data.aws_vpc.vpc]  
 }
 
 data "aws_ecr_repository" "frontend" {
@@ -63,24 +63,14 @@ data "aws_iam_role" "jenkins" {
 }
 
 data "aws_security_group" "jenkins_ec2" {
-  name = "Jenkins_sg"  # Must match exactly
-  
-  # OR use tags if you prefer (choose one approach)
-  # filter {
-  #   name   = "tag:Name"
-  #   values = ["Jenkins_sg"]
-  # }
+  name = "Jenkins_sg"  
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.vpc.id]  # Reference to your VPC
+    values = [data.aws_vpc.vpc.id]  
   }
 
-  # Optional description filter for additional safety
-  filter {
-    name   = "description"
-    values = ["Jenkins security group"]
-  }
+
 }
 
 data "aws_iam_role" "ecs_task_execution_role" {
