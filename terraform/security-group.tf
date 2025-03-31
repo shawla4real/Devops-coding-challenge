@@ -2,7 +2,7 @@
 resource "aws_security_group" "app-sg" {
   name        = "Jenkins_sg"
   description = "Jenkins security group"
-  vpc_id      = aws_vpc.vpc.id
+  vpc_id      = data.aws_vpc.vpc.id
 
 
   ingress {

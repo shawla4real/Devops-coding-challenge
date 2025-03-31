@@ -19,7 +19,7 @@ resource "aws_ecs_task_definition" "frontend" {
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([{
     name         = "frontend",
-    image        = "${aws_ecr_repository.frontend.repository_url}:latest",
+    image        = "${data.aws_ecr_repository.frontend.repository_url}:{env.COMMIT_SHA}",
     portMappings = [{ containerPort = 80 }],
 
     memory = 512, # Hard limit (MiB)
