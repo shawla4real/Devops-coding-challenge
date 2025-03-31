@@ -1,11 +1,11 @@
 
 
 resource "aws_lb" "frontend" {
-  name                       = "frontend-alb"
-  internal                   = false
-  load_balancer_type         = "application"
-  subnets                    = [data.aws_subnet.public.id, data.aws_subnet.public2.id]
-  
+  name               = "frontend-alb"
+  internal           = false
+  load_balancer_type = "application"
+  subnets            = [data.aws_subnet.public.id, data.aws_subnet.public2.id]
+
 
   tags = merge(
     local.common_tags,

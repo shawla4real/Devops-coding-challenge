@@ -13,41 +13,45 @@ data "aws_ami" "server_ami" {
   }
 }
 data "aws_vpc" "vpc" {
-  id = "vpc-0b9e821d627b1bbd4"  
+  id = "vpc-0b9e821d627b1bbd4"
 }
 
 data "aws_subnet" "public" {
   filter {
-    name   = "subnet-id"
-    values = ["subnet-04565c45ab6bae2ed"]
-  }
-
-  filter {
     name   = "tag:Name"
-    values = ["public-subnet-1a"] 
+    values = ["${local.prefix}-public-subnet"]  # Must match your existing subnet's name tag
   }
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.vpc.id]
+    values = [data.aws_vpc.vpc.id]  # Reference to your VPC
   }
+
+  filter {
+    name   = "cidr-block"
+    values = [var.subnet_cidr_list[0]]  # Matches your CIDR block
+  }
+
+  depends_on = [data.aws_vpc.vpc]  # Explicit dependency
 }
 
 data "aws_subnet" "public2" {
   filter {
-    name   = "subnet-id"
-    values = ["subnet-0d64f1acd80c73f03"]
-  }
-
-  filter {
     name   = "tag:Name"
-    values = ["public-subnet-1b"] 
+    values = ["${local.prefix}-public2-subnet"]  # Must match your existing subnet's name tag
   }
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.vpc.id]
+    values = [data.aws_vpc.vpc.id]  # Reference to your VPC
   }
+
+  filter {
+    name   = "cidr-block"
+    values = [var.subnet_cidr_list[2]]  # Matches your CIDR block
+  }
+
+  depends_on = [data.aws_vpc.vpc]  # Explicit dependency
 }
 
 data "aws_ecr_repository" "frontend" {
@@ -58,16 +62,24 @@ data "aws_iam_role" "jenkins" {
   name = "jenkins-role"
 }
 
-data "aws_security_group" "app-sg" {
+data "aws_security_group" "jenkins_ec2" {
+  name = "Jenkins_sg"  # Must match exactly
+  
+  # OR use tags if you prefer (choose one approach)
+  # filter {
+  #   name   = "tag:Name"
+  #   values = ["Jenkins_sg"]
+  # }
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.vpc.id]  
+    values = [data.aws_vpc.vpc.id]  # Reference to your VPC
   }
 
+  # Optional description filter for additional safety
   filter {
-    name   = "jenkins-sg"
-    values = ["app-sg"]  
+    name   = "description"
+    values = ["Jenkins security group"]
   }
 }
 
