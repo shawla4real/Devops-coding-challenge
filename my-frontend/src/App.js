@@ -6,7 +6,7 @@ function App() {
 
   useEffect(() => {
     // If running locally, ensure the URL matches your Express server's URL/port
-    fetch('http://54.237.134.142:8080')
+    fetch('http://54.237.134.142:8080/api/message')
       .then((res) => res.json())
       .then((data) => setMessage(data.message))
       .catch((err) => console.error('Error fetching API:', err));
