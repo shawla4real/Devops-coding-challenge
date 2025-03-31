@@ -12,7 +12,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket       = "sola-challenge-bucket"
+    bucket       = "mytestbucketsola"
     key          = "tfstate/terraform.tfstate"
     region       = "us-east-1"
     encrypt      = true
