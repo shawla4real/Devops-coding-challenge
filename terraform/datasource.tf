@@ -78,3 +78,7 @@ data "aws_security_group" "app-sg" {
     values = ["app-sg"]  
   }
 }
+
+data "aws_iam_role" "ecs_task_execution_role" {
+  name = "ecs_task_execution_role"
+}

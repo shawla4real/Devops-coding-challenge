@@ -16,7 +16,7 @@ resource "aws_ecs_task_definition" "frontend" {
   requires_compatibilities = ["FARGATE"]
   cpu                      = "256" # Required for Fargate
   memory                   = "512" # Required for Fargate (or use memoryReservation)
-  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+  execution_role_arn       = data.aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([{
     name         = "frontend",
     image        = "${data.aws_ecr_repository.frontend.repository_url}:{env.COMMIT_SHA}",
