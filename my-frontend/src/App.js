@@ -3,8 +3,8 @@ import './App.css';
 
 function App() {
   const [message, setMessage] = useState('');
-  const apiUrl = 'http://backend-alb-1074160532.us-east-1.elb.amazonaws.com';
-
+  const apiUrl = process.env.REACT_APP_API_URL;
+ 
   useEffect(() => {
     fetch(`${apiUrl}/api/message`)
       .then((res) => res.json())
