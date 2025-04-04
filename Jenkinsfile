@@ -5,8 +5,8 @@ pipeline {
   }
   environment {
       AWS_REGION = 'us-east-1'
-      ECR_FRONTEND = '662508601281.dkr.ecr.us-east-1.amazonaws.com/frontend'
-      ECR_BACKEND = '662508601281.dkr.ecr.us-east-1.amazonaws.com/backend'
+      ECR_FRONTEND = '1234567890.dkr.ecr.us-east-1.amazonaws.com/frontend'
+      ECR_BACKEND = '1234567890.dkr.ecr.us-east-1.amazonaws.com/backend'
       SERVICE_NAME_B = 'backend-service'
       CLUSTER_NAME = 'Devops-cluster'
       SERVICE_NAME = 'frontend-service'
